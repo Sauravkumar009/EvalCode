@@ -1,0 +1,75 @@
+{
+  "problem": "add_two_integers",
+  "problem_description": "Read two integers on a single line separated by whitespace and print their sum followed by a newline. The program must handle negative numbers, zero, and large 32-bit boundary integers without signed integer overflow.",
+  "time_limit_s": 1,
+  "memory_limit_mb": 64,
+  "sample_input": "7 5\n",
+  "llm_config": {
+    "model": "llama3.1",
+    "temperature": 0,
+    "seed": 42
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "weight": 0.20,
+      "params": {
+        "testset_dir": "tests/add/",
+        "auto_generate": true,
+        "num_tests": 10
+      }
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "weight": 0.10,
+      "params": { "flags": "-Wall -Wextra -Werror -std=c11" }
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "weight": 0.10,
+      "params": { "max_cyclomatic": 8, "max_function_length": 40 }
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "weight": 0.10,
+      "params": { "expect_helpers": true, "min_functions": 2 }
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "weight": 0.10,
+      "params": {
+        "auto_generate": true,
+        "cases": ["negatives", "zero", "int_overflow", "whitespace_formatting"]
+      }
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "weight": 0.10,
+      "params": { "required": "O(1)", "sizes": [1, 10, 100] }
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "weight": 0.10,
+      "params": { "flags": "-fsanitize=address,undefined" }
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "weight": 0.10,
+      "params": { "model": "llama3.1", "temperature": 0, "seed": 42 }
+    },
+    {
+      "name": "originality",
+      "analyzer": "similarity_flag",
+      "weight": 0.10,
+      "params": { "corpus_dir": "submissions/", "flag_threshold": 0.85 }
+    }
+  ]
+}

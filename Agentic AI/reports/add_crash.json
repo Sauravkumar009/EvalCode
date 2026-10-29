@@ -1,0 +1,417 @@
+{
+  "submission": "add_crash.c",
+  "rules_hash": "sha256:7d4039cfbda80618e1da8e44a694abac6c6920ce08b0ea5fcadc7a535e7ad4a1",
+  "grade": 56.0,
+  "first_pass": {
+    "compiled": true,
+    "smoke_ok": false,
+    "suspected_infinite_loop": false
+  },
+  "metrics": [
+    {
+      "name": "correctness",
+      "analyzer": "io_tests",
+      "score": 0.0,
+      "weight": 0.2,
+      "contribution": 0.0,
+      "evidence": {
+        "generated_by_llm": true,
+        "tests_passed": 0,
+        "tests_total": 10,
+        "failing": [
+          {
+            "test": "01",
+            "input": "7 5",
+            "expected": "12",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "02",
+            "input": "0 0",
+            "expected": "0",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "03",
+            "input": "-10 25",
+            "expected": "15",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "04",
+            "input": "-40 -60",
+            "expected": "-100",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "05",
+            "input": "1234 5678",
+            "expected": "6912",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "06",
+            "input": "-99999 99999",
+            "expected": "0",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "07",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "08",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "09",
+            "input": "1000000 2000000",
+            "expected": "3000000",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          },
+          {
+            "test": "10",
+            "input": "0 -500",
+            "expected": "-500",
+            "got": "",
+            "note": "runtime error: exit code 3221225477"
+          }
+        ]
+      },
+      "feedback": "0/10 tests pass. Fails on input '7 5' (expected '12', got '')."
+    },
+    {
+      "name": "syntax",
+      "analyzer": "compiler_warnings",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "warning_count": 0,
+        "warnings": []
+      },
+      "feedback": "Clean compile with 0 warnings."
+    },
+    {
+      "name": "structure",
+      "analyzer": "static_analysis",
+      "score": 0.6,
+      "weight": 0.1,
+      "contribution": 6.0,
+      "evidence": {
+        "functions": [
+          {
+            "name": "main",
+            "cyclomatic_complexity": 1,
+            "nloc": 8
+          }
+        ],
+        "cppcheck_issues": [],
+        "has_prototypes": false
+      },
+      "feedback": "no headers/prototypes, single-block code"
+    },
+    {
+      "name": "modularity",
+      "analyzer": "function_split",
+      "score": 0.3,
+      "weight": 0.1,
+      "contribution": 3.0,
+      "evidence": {
+        "functions_defined": 1,
+        "function_names": [
+          "main"
+        ],
+        "expected_min": 2
+      },
+      "feedback": "Only main() is defined. Extract a helper function (e.g., add(long long, long long))."
+    },
+    {
+      "name": "logical",
+      "analyzer": "edge_case_runner",
+      "score": 0.0,
+      "weight": 0.1,
+      "contribution": 0.0,
+      "evidence": {
+        "generated_by_llm": true,
+        "cases_tested": 6,
+        "cases_passed": 0,
+        "counter_test_cases": [
+          {
+            "category": "int_overflow",
+            "input": "2147483647 1",
+            "expected": "2147483648",
+            "got": "",
+            "explanation": "a + b overflows on 32-bit signed ints. Use long long or check that b <= INT_MAX - a before adding."
+          },
+          {
+            "category": "int_overflow",
+            "input": "-2147483648 -1",
+            "expected": "-2147483649",
+            "got": "",
+            "explanation": "Signed integer underflow on INT_MIN - 1 requires 64-bit precision."
+          },
+          {
+            "category": "negatives",
+            "input": "-15 -35",
+            "expected": "-50",
+            "got": "",
+            "explanation": "Sum of two negative numbers."
+          },
+          {
+            "category": "zero",
+            "input": "0 0",
+            "expected": "0",
+            "got": "",
+            "explanation": "Zero identity boundary condition."
+          },
+          {
+            "category": "whitespace_formatting",
+            "input": "42    58",
+            "expected": "100",
+            "got": "",
+            "explanation": "Whitespace separation and leading spaces handling."
+          },
+          {
+            "category": "int_overflow",
+            "input": "1073741824 1073741824",
+            "expected": "2147483648",
+            "got": "",
+            "explanation": "Sum exceeding 32-bit positive limit."
+          }
+        ]
+      },
+      "feedback": "Fails on counter-test input '2147483647 1' (expected '2147483648', got ''). WHY: a + b overflows on 32-bit signed ints. Use long long or check that b <= INT_MAX - a before adding."
+    },
+    {
+      "name": "complexity",
+      "analyzer": "complexity_estimator",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "required_complexity": "O(1)",
+        "estimated_time_complexity": "O(1)",
+        "estimated_space_complexity": "O(1)",
+        "sizes": [
+          1,
+          10,
+          100
+        ],
+        "timings_ms": [
+          31.808,
+          25.247,
+          23.31
+        ],
+        "loops_detected": 0
+      },
+      "feedback": "Time: O(1), Space: O(1) confirmed across sizes [1, 10, 100]."
+    },
+    {
+      "name": "memory_safety",
+      "analyzer": "sanitizer_run",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "memory_errors": [],
+        "ubsan_notes": [],
+        "mode": "static_safety_fallback"
+      },
+      "feedback": "ASan/UBSan clean"
+    },
+    {
+      "name": "readability",
+      "analyzer": "llm_review",
+      "score": 0.7,
+      "weight": 0.1,
+      "contribution": 7.0,
+      "evidence": {
+        "model": "llama3.1 (deterministic-fallback)",
+        "temperature": 0.0,
+        "seed": 42,
+        "raw_response": "{\"score\": 7, \"reasons\": [\"Single-letter variable names\"]}"
+      },
+      "feedback": "Single-letter variable names"
+    },
+    {
+      "name": "originality",
+      "analyzer": "similarity_flag",
+      "score": 1.0,
+      "weight": 0.1,
+      "contribution": 10.0,
+      "evidence": {
+        "max_similarity": 0.84,
+        "most_similar_file": "add_syntax_error.c",
+        "threshold": 0.85,
+        "flagged": false
+      },
+      "feedback": "max similarity 0.84 (safe)"
+    }
+  ],
+  "flags": [],
+  "failures": [
+    {
+      "test": "01",
+      "input": "7 5",
+      "expected": "12",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "02",
+      "input": "0 0",
+      "expected": "0",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "03",
+      "input": "-10 25",
+      "expected": "15",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "04",
+      "input": "-40 -60",
+      "expected": "-100",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "05",
+      "input": "1234 5678",
+      "expected": "6912",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "06",
+      "input": "-99999 99999",
+      "expected": "0",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "07",
+      "input": "2147483647 1",
+      "expected": "2147483648",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "08",
+      "input": "-2147483648 -1",
+      "expected": "-2147483649",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "09",
+      "input": "1000000 2000000",
+      "expected": "3000000",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "10",
+      "input": "0 -500",
+      "expected": "-500",
+      "got": "(empty or crash)",
+      "why": "runtime error: exit code 3221225477"
+    },
+    {
+      "test": "Counter-case (negatives)",
+      "input": "-15 -35",
+      "expected": "-50",
+      "got": "(empty or crash)",
+      "why": "Sum of two negative numbers."
+    },
+    {
+      "test": "Counter-case (whitespace_formatting)",
+      "input": "42    58",
+      "expected": "100",
+      "got": "(empty or crash)",
+      "why": "Whitespace separation and leading spaces handling."
+    },
+    {
+      "test": "Counter-case (int_overflow)",
+      "input": "1073741824 1073741824",
+      "expected": "2147483648",
+      "got": "(empty or crash)",
+      "why": "Sum exceeding 32-bit positive limit."
+    }
+  ],
+  "suggestions": [
+    "Handle overflow explicitly with a wider integer type (e.g. long long) or check b <= INT_MAX - a.",
+    "Add function prototypes/headers and avoid placing all logic into a single monolithic block.",
+    "Extract helper function (e.g., int add(int a, int b)) into its own function; call it from main.",
+    "Rename single-letter variables (e.g., a, b to num1, num2); add descriptive comments."
+  ],
+  "usefulness_limitations": {
+    "usefulness": [
+      {
+        "use_case": "Coding-interview and hiring screens",
+        "example": "A company runs 500 candidate submissions for an 'add two integers safely' task. The agent ranks them by correctness, edge-case handling, and memory safety, and gives an explainable per-metric score.",
+        "benefit": "Fast first-round filtering where every rejection can be justified metric by metric."
+      },
+      {
+        "use_case": "Plagiarism and LLM-copy triage for instructors",
+        "example": "Two submissions reach a similarity of 0.93 against the 0.85 threshold, so the agent raises a flag in the report. The instructor reviews only those pairs instead of all 300.",
+        "benefit": "Saves review time by narrowing manual checking to suspicious cases."
+      },
+      {
+        "use_case": "Automated lab assignment grading in university courses",
+        "example": "In a course of 300 students submitting weekly assignments, the agent validates correctness, enforces modularity rules, and flags infinite loops unattended.",
+        "benefit": "Eliminates TA grading fatigue and guarantees consistent, reproducible scoring across all submissions."
+      },
+      {
+        "use_case": "Continuous integration (CI/CD) pre-commit quality gate",
+        "example": "Junior developers submit pull requests for embedded systems. The agent automatically checks static complexity, compiler warnings, and sanitizer bounds before merging.",
+        "benefit": "Prevents memory leaks, buffer overruns, and style regressions from entering production branches."
+      }
+    ],
+    "limitations": [
+      {
+        "limitation": "Tests cannot prove correctness",
+        "example": "A submission passes all 10 hidden tests but fails when the input has extra whitespace or a trailing newline that no test covers. The agent still reports 10/10.",
+        "mitigation": "The agent should create its own extra tricky test inputs and compare the student's answers with the answers of a correct program."
+      },
+      {
+        "limitation": "Empirical complexity estimation is sensitive to OS scheduler noise",
+        "example": "Under heavy background CPU load, an O(1) submission may exhibit variable execution times across sizes, risking false classification as non-constant time.",
+        "mitigation": "Combine empirical wall-clock timing with static AST loop/recursion analysis and instruction-count profiling."
+      },
+      {
+        "limitation": "Token similarity can miss obfuscated plagiarism",
+        "example": "A student renames identifiers, reorders independent statements, and inserts dummy functions, reducing token similarity below 0.85 despite copied logic.",
+        "mitigation": "Integrate AST subgraph isomorphism and semantic control-flow graph (CFG) analysis alongside token matching."
+      },
+      {
+        "limitation": "Non-deterministic LLM feedback across different local or cloud models",
+        "example": "Different LLMs or varying temperature parameters might judge variable naming or comments with different leniency, violating grading reproducibility.",
+        "mitigation": "Fix LLM temperature to 0.0 with a static seed, and enforce a rule-based deterministic static rubric fallback."
+      }
+    ]
+  },
+  "tool_versions": {
+    "python": "3.14.7",
+    "gcc": "6.3.0",
+    "lizard": "1.17.10",
+    "cppcheck": "not installed"
+  }
+}
